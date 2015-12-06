@@ -1,0 +1,107 @@
+<!--<%= debug params %>-->
+<!--<div class="info-percent">
+    <span class="link">
+        <%= link_to "Trang chủ", :controller => :static_pages, :action => :home %>
+    </span>
+    <span class="category">
+        <%= @category.name %>
+    </span>
+    <span class="number"><%= @percent %></span><span class="text">% hoàn thành</span>
+</div>-->
+<div class="content">
+    <div class="info-word" data-id="<%= @word.id %>" data-category-id="<%= @category.id %>">
+        <div class="title">
+            <%= @word.mean %>
+        </div>
+        <div class="mean">
+        </div>
+    </div>
+    <ul class="ch-grid ch-card">
+    	<% @characters.each do |character| %>
+            <li>
+        		<div class="ch-item ch-answer <%= (character.eql?"*")? "ch-fillable" : "" %>">
+        			<div class="ch-info-wrap">
+        				<div class="ch-info">
+        					<div class="ch-info-front">
+        					    <div class="kanji">
+        					        <%= (character.eql?"*")? "" : character %>
+        					    </div>
+        					    <div class="meaning"></div>
+        					</div>
+        					<div class="ch-info-back ch-error">
+        						<div class="kanji"></div>
+                                <div class="meaning"></div>
+        					</div>
+        				</div>
+        			</div>
+        		</div>
+        	</li>
+        <% end %>
+    </ul>
+
+    <div class="collapse-meaning">
+        <div id="info-kanji" class="collapse info-kanji">
+            <button class="btn btn-default btn-toggle" data-toggle="collapse" data-target="#info-kanji">Đóng</button>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <div class="text">
+                            窓
+                        </div>
+                        <div class="mean">
+                            window
+                        </div>
+                    </div>
+                    <div class="col-sm-8 info">
+                        <dl class="dl-horizontal"> 
+                          <dt>other meanings</dt>
+                          	<dd class="other_mean"></dd> 
+                          <dt>kun readings</dt>
+                            <dd class="kun"></dd>
+                          <dt>on readings</dt>
+                            <dd class="on"></dd> 
+                        </dl>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="bottom-bar">
+        <ul class="ch-grid ch-grid-small">
+    	<% @kanjis.each_with_index do |kanji, index| %>
+            <li>
+        		<div class="ch-item ch-chose">
+        			<div class="ch-info-wrap">
+        				<div class="ch-info">
+        					<div class="ch-info-front">
+        					    <div class="kanji">
+        					        <%= kanji %>
+        					    </div>
+        					</div>
+        				</div>
+        			</div>
+        			<div class="index"><%= index+1 %></div>
+        		</div>
+        	</li>
+        <% end %>
+        </ul>
+        <button type="button" class="btn btn-default btn-prev hidden">Quay lại</button>
+        <button type="button" class="btn btn-default btn-next" data-answered='false'>Tiếp tục</button>
+    </div>
+    
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="indicateModal" role="dialog">
+	<div class="modal-dialog modal-sm">
+	  <div class="modal-content">
+	    <div class="modal-body">
+		<h2>Yêu cầu dữ liệu...</h2>
+	      <div class="progress">
+		    <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width:100%">
+		    </div>
+		  </div>
+	    </div>
+	  </div>
+	</div>
+</div>

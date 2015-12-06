@@ -1,4 +1,6 @@
 class Result < ActiveRecord::Base
-  belongs_to :test
-  belongs_to :answer
+  belongs_to :word
+  belongs_to :user
+  
+  scope :learned, ->{where(results: {correct: true})}
 end

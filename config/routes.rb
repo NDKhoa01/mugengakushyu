@@ -1,16 +1,22 @@
 Rails.application.routes.draw do
+  get 'friend/create'
+
   resources :goals
   resources :results
-  resources :answers
-  resources :tests
   resources :categories
-  resources :characters
   resources :words
   resources :kanjis
   root 'static_pages#home'
 
-  devise_for :users
-  resources :books
+  devise_for :users, :controllers => { :omniauth_callbacks => "omniauth_callbacks" }
+  resources :users, only: [:show, :index]
+  resources :friends, only: [:create, :destroy, :update]
+  scope "learns" ,:controller => :learns do
+    get 'word/:category' => :word
+    post 'check' => :check
+    post 'kanji' => :kanji
+    post 'questtion' => :questtion
+  end
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 

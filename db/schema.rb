@@ -11,24 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20151025060018) do
-
-  create_table "answers", force: :cascade do |t|
-    t.integer  "test_id",    limit: 4
-    t.integer  "kanji_id",   limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "answers", ["kanji_id"], name: "index_answers_on_kanji_id", using: :btree
-  add_index "answers", ["test_id"], name: "index_answers_on_test_id", using: :btree
-
-  create_table "books", force: :cascade do |t|
-    t.string   "title",           limit: 255
-    t.integer  "number_of_pages", limit: 4
-    t.datetime "created_at",                  null: false
-    t.datetime "updated_at",                  null: false
-  end
+ActiveRecord::Schema.define(version: 20151205160308) do
 
   create_table "categories", force: :cascade do |t|
     t.string   "name",        limit: 255
@@ -37,15 +20,15 @@ ActiveRecord::Schema.define(version: 20151025060018) do
     t.datetime "updated_at",              null: false
   end
 
-  create_table "characters", force: :cascade do |t|
-    t.string   "text",       limit: 255
-    t.integer  "order",      limit: 4
-    t.integer  "kanji_id",   limit: 4
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+  create_table "friends", force: :cascade do |t|
+    t.integer  "user_id",    limit: 4
+    t.integer  "friend_id",  limit: 4
+    t.boolean  "accepted",   limit: 1
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
   end
 
-  add_index "characters", ["kanji_id"], name: "index_characters_on_kanji_id", using: :btree
+  add_index "friends", ["friend_id"], name: "index_friends_on_friend_id", using: :btree
 
   create_table "goals", force: :cascade do |t|
     t.integer  "goal",       limit: 4
@@ -58,36 +41,28 @@ ActiveRecord::Schema.define(version: 20151025060018) do
   add_index "goals", ["user_id"], name: "index_goals_on_user_id", using: :btree
 
   create_table "kanjis", force: :cascade do |t|
-    t.string   "text",       limit: 255
-    t.string   "mean",       limit: 255
-    t.string   "other_mean", limit: 255
-    t.string   "kun",        limit: 255
-    t.string   "on",         limit: 255
-    t.datetime "created_at",             null: false
-    t.datetime "updated_at",             null: false
+    t.string   "text",        limit: 255
+    t.string   "mean",        limit: 255
+    t.string   "other_mean",  limit: 255
+    t.string   "kun",         limit: 255
+    t.string   "on",          limit: 255
+    t.integer  "category_id", limit: 4
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
+  add_index "kanjis", ["category_id"], name: "index_kanjis_on_category_id", using: :btree
+
   create_table "results", force: :cascade do |t|
-    t.integer  "test_id",    limit: 4
-    t.integer  "order",      limit: 4
-    t.integer  "answer_id",  limit: 4
+    t.integer  "user_id",    limit: 4
+    t.integer  "word_id",    limit: 4
     t.boolean  "correct",    limit: 1
     t.datetime "created_at",           null: false
     t.datetime "updated_at",           null: false
   end
 
-  add_index "results", ["answer_id"], name: "index_results_on_answer_id", using: :btree
-  add_index "results", ["test_id"], name: "index_results_on_test_id", using: :btree
-
-  create_table "tests", force: :cascade do |t|
-    t.integer  "word_id",    limit: 4
-    t.integer  "user_id",    limit: 4
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-  end
-
-  add_index "tests", ["user_id"], name: "index_tests_on_user_id", using: :btree
-  add_index "tests", ["word_id"], name: "index_tests_on_word_id", using: :btree
+  add_index "results", ["user_id"], name: "index_results_on_user_id", using: :btree
+  add_index "results", ["word_id"], name: "index_results_on_word_id", using: :btree
 
   create_table "user_logs", force: :cascade do |t|
     t.integer  "user_id",    limit: 4
@@ -109,6 +84,11 @@ ActiveRecord::Schema.define(version: 20151025060018) do
     t.string   "last_sign_in_ip",        limit: 255
     t.datetime "created_at",                                      null: false
     t.datetime "updated_at",                                      null: false
+    t.string   "name",                   limit: 255
+    t.string   "gender",                 limit: 255
+    t.integer  "age",                    limit: 4
+    t.string   "provider",               limit: 255
+    t.string   "uid",                    limit: 255
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
@@ -125,13 +105,9 @@ ActiveRecord::Schema.define(version: 20151025060018) do
 
   add_index "words", ["category_id"], name: "index_words_on_category_id", using: :btree
 
-  add_foreign_key "answers", "kanjis"
-  add_foreign_key "answers", "tests"
-  add_foreign_key "characters", "kanjis"
   add_foreign_key "goals", "users"
-  add_foreign_key "results", "answers"
-  add_foreign_key "results", "tests"
-  add_foreign_key "tests", "users"
-  add_foreign_key "tests", "words"
+  add_foreign_key "kanjis", "categories"
+  add_foreign_key "results", "users"
+  add_foreign_key "results", "words"
   add_foreign_key "words", "categories"
 end
